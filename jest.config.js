@@ -21,4 +21,6 @@ module.exports = {
     coverageReporters: ['text', 'lcov', 'html'],
     testTimeout: 30000, // Increase timeout for E2E tests
     setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+    // Run E2E tests sequentially to avoid file conflicts
+    maxWorkers: 1,
 };

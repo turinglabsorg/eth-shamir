@@ -581,7 +581,7 @@ describe("ETH Shamir CLI - End-to-End Tests", () => {
         "--password",
         "filetest123",
         "--output",
-        "test-encrypted.txt",
+        "test-encrypted-${getTestId()}.txt",
       ]);
 
       expect(generateResult.exitCode).toBe(0);
@@ -591,7 +591,7 @@ describe("ETH Shamir CLI - End-to-End Tests", () => {
       const restoreResult = await TestUtils.runCommand([
         "restore",
         "--file",
-        "test-encrypted.txt",
+        "test-encrypted-${getTestId()}.txt",
         "--password",
         "filetest123",
       ]);

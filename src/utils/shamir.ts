@@ -145,7 +145,7 @@ export class ShamirSecretSharing {
       if (decoded.length > 0 && /[\x20-\x7E]/.test(decoded)) {
         return decoded;
       }
-    } catch (error) {
+    } catch {
       // If UTF-8 decoding fails, it's probably a hex string
     }
 
