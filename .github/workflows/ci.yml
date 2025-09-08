@@ -103,7 +103,7 @@ jobs:
         eth-shamir generate --shares 2 --threshold 2 --password "test123"
         
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
         path: |

@@ -37,16 +37,16 @@ Split an Ethereum private key into multiple shares:
 
 ```bash
 # Interactive mode
-npm run dev create
+npm run dev -- create
 
 # Command line mode
-npm run dev create --key <private-key> --shares 5 --threshold 3
+npm run dev create -- --key <private-key> --shares 5 --threshold 3
 
 # Save shares to file
-npm run dev create --key <private-key> --shares 5 --threshold 3 --output shares.txt
+npm run dev create -- --key <private-key> --shares 5 --threshold 3 --output shares.txt
 
 # With password protection
-npm run dev create --key <private-key> --shares 5 --threshold 3 --password "mypassword"
+npm run dev create -- --key <private-key> --shares 5 --threshold 3 --password "mypassword"
 ```
 
 ### Restore Private Key
@@ -58,10 +58,10 @@ Restore a private key from shares:
 npm run dev restore
 
 # From command line arguments
-npm run dev restore --shares <share1> <share2> <share3>
+npm run dev restore -- --shares <share1> <share2> <share3>
 
 # From file
-npm run dev restore --file shares.txt
+npm run dev restore -- --file shares.txt
 
 # With password protection
 npm run dev restore --shares <share1> <share2> <share3> --password "mypassword"
@@ -76,13 +76,13 @@ Validate shares without restoring the secret:
 npm run dev validate
 
 # From command line arguments
-npm run dev validate --shares <share1> <share2> <share3>
+npm run dev validate -- --shares <share1> <share2> <share3>
 
 # From file
-npm run dev validate --file shares.txt
+npm run dev validate -- --file shares.txt
 
 # With password protection
-npm run dev validate --shares <share1> <share2> <share3> --password "mypassword"
+npm run dev validate -- --shares <share1> <share2> <share3> --password "mypassword"
 ```
 
 ### Generate Mnemonic and Shares

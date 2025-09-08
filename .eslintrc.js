@@ -10,6 +10,14 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
     },
+    overrides: [
+        {
+            files: ['**/*.test.ts', '**/*.spec.ts', 'tests/**/*.ts'],
+            parserOptions: {
+                project: null,
+            },
+        },
+    ],
     rules: {
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/explicit-function-return-type': 'off',

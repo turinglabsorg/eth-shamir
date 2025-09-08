@@ -2,7 +2,7 @@
  * Test utilities for end-to-end testing
  */
 
-import { spawn, ChildProcess } from "child_process";
+import { spawn } from "child_process";
 import { writeFileSync, readFileSync, unlinkSync, existsSync } from "fs";
 import { join } from "path";
 
