@@ -18,6 +18,9 @@ test-*.txt
 .env.test.local
 .env.production.local
 
+# Act secrets file
+.secrets
+
 # IDE
 .vscode/
 .idea/
