@@ -1,5 +1,5 @@
 {
-  "name": "eth-shamir",
+  "name": "@turinglabs/eth-shamir",
   "version": "1.0.0",
   "description": "Create and restore Eth private keys with Shamir",
   "main": "dist/index.js",
