@@ -21,6 +21,9 @@ test-*.txt
 # Act secrets file
 .secrets
 
+# NPM configuration
+.npmrc
+
 # IDE
 .vscode/
 .idea/
