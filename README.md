@@ -9,6 +9,7 @@ A TypeScript command-line tool for creating and restoring Ethereum private keys 
 - ✅ **Share Validation**: Validate shares without revealing the secret
 - 🎯 **Flexible Thresholds**: Configure total shares and minimum threshold
 - 📁 **File Support**: Save/load shares from files
+- 📄 **PDF Generation**: Generate PDF documents with QR codes for each share
 - 🖥️ **Interactive Mode**: User-friendly command-line interface
 - 🌱 **Mnemonic Generation**: Generate new mnemonics with viem and create shares automatically
 - 🔒 **Password Protection**: Optional AES256 encryption for additional security
@@ -47,6 +48,12 @@ npm run dev create -- --key <private-key> --shares 5 --threshold 3 --output shar
 
 # With password protection
 npm run dev create -- --key <private-key> --shares 5 --threshold 3 --password "mypassword"
+
+# Generate PDF documents with QR codes
+npm run dev create -- --key <private-key> --shares 5 --threshold 3 --pdf
+
+# Generate PDF documents with custom output directory
+npm run dev create -- --key <private-key> --shares 5 --threshold 3 --pdf --pdf-output my-shares
 ```
 
 ### Restore Private Key
@@ -101,7 +108,48 @@ npm run dev generate -- --shares 5 --threshold 3 --output mnemonic-shares.txt
 
 # With password protection
 npm run dev generate -- --shares 5 --threshold 3 --password "mypassword"
+
+# Generate PDF documents with QR codes
+npm run dev generate -- --shares 5 --threshold 3 --pdf
+
+# Generate PDF documents with custom output directory
+npm run dev generate -- --shares 5 --threshold 3 --pdf --pdf-output my-mnemonic-shares
 ```
+
+## PDF Generation Feature
+
+The PDF generation feature creates professional, print-ready documents for each share with the following features:
+
+### PDF Document Contents
+- **Header**: Document title, share information, and threshold requirements
+- **QR Code**: Large, scannable QR code containing the share data
+- **Instructions**: Step-by-step instructions for using the share
+- **Security Warning**: Prominent warning about document security
+- **Share Information**: Share number, total shares, and truncated share data
+
+### Benefits of PDF Shares
+- **Physical Storage**: Print and store shares in secure physical locations
+- **Easy Scanning**: Large QR codes for quick restoration
+- **Professional Format**: Clean, organized layout suitable for important documents
+- **Security**: Clear warnings and instructions for proper handling
+- **Backup**: Physical backup of digital shares
+
+### PDF File Naming
+PDF files are automatically named with the following pattern:
+```
+{title}-{share-number}-of-{total-shares}-{date}.pdf
+```
+
+Examples:
+- `ethereum-private-key-share-01-of-5-2025-09-08.pdf`
+- `ethereum-mnemonic-share-02-of-3-2025-09-08.pdf`
+
+### Security Considerations
+- Each PDF contains only one share
+- QR codes contain the complete share data
+- Documents include security warnings
+- Store PDFs in separate, secure locations
+- Consider laminating for durability
 
 ## Command Options
 
@@ -111,6 +159,8 @@ npm run dev generate -- --shares 5 --threshold 3 --password "mypassword"
 - `-t, --threshold <number>`: Minimum shares required to restore (default: 3)
 - `-o, --output <file>`: Output file for shares (optional)
 - `-p, --password <password>`: Password to encrypt shares (optional)
+- `--pdf`: Generate PDF documents with QR codes for each share
+- `--pdf-output <directory>`: Directory to save PDF files (default: shares-pdf)
 
 ### Restore Command
 - `-s, --shares <shares...>`: Share strings to use for restoration
@@ -127,6 +177,8 @@ npm run dev generate -- --shares 5 --threshold 3 --password "mypassword"
 - `-t, --threshold <number>`: Minimum shares required to restore (default: 3)
 - `-o, --output <file>`: Output file for mnemonic and shares (optional)
 - `-p, --password <password>`: Password to encrypt shares (optional)
+- `--pdf`: Generate PDF documents with QR codes for each share
+- `--pdf-output <directory>`: Directory to save PDF files (default: mnemonic-shares-pdf)
 
 ## Examples
 
@@ -134,10 +186,10 @@ npm run dev generate -- --shares 5 --threshold 3 --password "mypassword"
 
 ```bash
 # With 0x prefix
-npm run dev create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
+npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
 
 # Without 0x prefix (also works)
-npm run dev create --key 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
+npm run dev create -- --key 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
 ```
 
 ### Example 2: Restore from 3 shares
@@ -150,7 +202,7 @@ npm run dev restore --shares 01a1b2c3d4e5f6... 02f6e5d4c3b2a1... 03b2a1c3d4e5f6.
 
 ```bash
 # Create and save shares (with 0x prefix)
-npm run dev create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --output my-shares.txt
+npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --output my-shares.txt
 
 # Restore from file
 npm run dev restore --file my-shares.txt
@@ -170,7 +222,7 @@ npm run dev generate -- --shares 3 --threshold 2 --output my-mnemonic.txt
 
 ```bash
 # Create encrypted shares
-npm run dev create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef -- --shares 3 --threshold 2 --password "securepassword"
+npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 3 --threshold 2 --password "securepassword"
 
 # Restore with password
 npm run dev restore -- --shares <encrypted-share1> <encrypted-share2> --password "securepassword"

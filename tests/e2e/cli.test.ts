@@ -603,4 +603,113 @@ describe("ETH Shamir CLI - End-to-End Tests", () => {
       expect(restoredMnemonic).toBe(originalMnemonic);
     });
   });
+
+  describe("PDF Generation", () => {
+    test("should generate PDF files for private key shares", async () => {
+      const privateKey = TestUtils.generateTestPrivateKey();
+      const result = await TestUtils.runCommand([
+        "create",
+        "--key",
+        privateKey,
+        "--shares",
+        "2",
+        "--threshold",
+        "2",
+        "--pdf",
+        "--pdf-output",
+        "test-pdf-shares",
+      ]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain("PDF documents generated successfully");
+      expect(result.stdout).toContain("PDF files saved to");
+      expect(result.stdout).toContain("test-pdf-shares");
+      expect(result.stdout).toContain("ethereum-private-key-share-01-of-2");
+      expect(result.stdout).toContain("ethereum-private-key-share-02-of-2");
+      expect(result.stdout).toContain("QR code with the share data");
+    });
+
+    test("should generate PDF files for mnemonic shares", async () => {
+      const result = await TestUtils.runCommand([
+        "generate",
+        "--shares",
+        "3",
+        "--threshold",
+        "2",
+        "--pdf",
+        "--pdf-output",
+        "test-pdf-mnemonic",
+      ]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain("PDF documents generated successfully");
+      expect(result.stdout).toContain("PDF files saved to");
+      expect(result.stdout).toContain("test-pdf-mnemonic");
+      expect(result.stdout).toContain("ethereum-mnemonic-share-01-of-3");
+      expect(result.stdout).toContain("ethereum-mnemonic-share-02-of-3");
+      expect(result.stdout).toContain("ethereum-mnemonic-share-03-of-3");
+      expect(result.stdout).toContain("QR code with the mnemonic share data");
+    });
+
+    test("should generate PDF files with encrypted shares", async () => {
+      const privateKey = TestUtils.generateTestPrivateKey();
+      const result = await TestUtils.runCommand([
+        "create",
+        "--key",
+        privateKey,
+        "--shares",
+        "2",
+        "--threshold",
+        "2",
+        "--password",
+        "testpass123",
+        "--pdf",
+        "--pdf-output",
+        "test-pdf-encrypted",
+      ]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain("PDF documents generated successfully");
+      expect(result.stdout).toContain("Password Protection");
+      expect(result.stdout).toContain("Remember the password");
+    });
+
+    test("should use default PDF output directory when not specified", async () => {
+      const privateKey = TestUtils.generateTestPrivateKey();
+      const result = await TestUtils.runCommand([
+        "create",
+        "--key",
+        privateKey,
+        "--shares",
+        "2",
+        "--threshold",
+        "2",
+        "--pdf",
+      ]);
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stdout).toContain("PDF documents generated successfully");
+      expect(result.stdout).toContain("shares-pdf");
+    });
+
+    test("should handle PDF generation errors gracefully", async () => {
+      // Test with invalid output directory (should still work but might show warnings)
+      const privateKey = TestUtils.generateTestPrivateKey();
+      const result = await TestUtils.runCommand([
+        "create",
+        "--key",
+        privateKey,
+        "--shares",
+        "2",
+        "--threshold",
+        "2",
+        "--pdf",
+        "--pdf-output",
+        "/invalid/path/that/does/not/exist",
+      ]);
+
+      // Should still create shares successfully even if PDF generation fails
+      expect(result.stdout).toContain("Shares created successfully");
+    });
+  });
 });

@@ -27,6 +27,11 @@ program
   .option("-t, --threshold <number>", "Minimum shares required to restore", "3")
   .option("-o, --output <file>", "Output file for shares (optional)")
   .option("-p, --password <password>", "Password to encrypt shares (optional)")
+  .option("--pdf", "Generate PDF documents with QR codes for each share")
+  .option(
+    "--pdf-output <directory>",
+    "Directory to save PDF files (default: shares-pdf)"
+  )
   .action(async (options) => {
     try {
       await createShares(options);
@@ -85,6 +90,11 @@ program
     "Output file for mnemonic and shares (optional)"
   )
   .option("-p, --password <password>", "Password to encrypt shares (optional)")
+  .option("--pdf", "Generate PDF documents with QR codes for each share")
+  .option(
+    "--pdf-output <directory>",
+    "Directory to save PDF files (default: mnemonic-shares-pdf)"
+  )
   .action(async (options) => {
     try {
       await generateMnemonicAndShares(options);

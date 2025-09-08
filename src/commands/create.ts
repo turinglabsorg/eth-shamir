@@ -1,8 +1,9 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { writeFileSync } from "fs";
-import { join } from "path";
+import { writeFileSync, mkdirSync } from "fs";
+import { join, dirname } from "path";
 import { ShamirSecretSharing } from "../utils/shamir";
+import { PDFGenerator } from "../utils/pdf";
 
 interface CreateOptions {
   key?: string;
@@ -10,6 +11,8 @@ interface CreateOptions {
   threshold?: string;
   output?: string;
   password?: string;
+  pdf?: boolean;
+  pdfOutput?: string;
 }
 
 export async function createShares(options: CreateOptions): Promise<void> {
@@ -127,6 +130,73 @@ export async function createShares(options: CreateOptions): Promise<void> {
         .join("\n");
       writeFileSync(outputPath, content, "utf8");
       console.log(chalk.green(`\n💾 Shares saved to: ${outputPath}`));
+    }
+
+    // Generate PDF files if requested
+    if (options.pdf) {
+      try {
+        console.log(chalk.blue("\n📄 Generating PDF documents..."));
+
+        const pdfOutputDir = options.pdfOutput
+          ? join(process.cwd(), options.pdfOutput)
+          : join(process.cwd(), "shares-pdf");
+
+        // Ensure output directory exists
+        mkdirSync(pdfOutputDir, { recursive: true });
+
+        const pdfFiles = await PDFGenerator.generateAllSharePDFs(shares, {
+          totalShares,
+          threshold,
+          isEncrypted: !!options.password,
+          password: options.password,
+          outputPath: pdfOutputDir,
+          title: "Ethereum Private Key Share",
+          subtitle: "Secure Share Document",
+        });
+
+        console.log(chalk.green(`\n📄 PDF documents generated successfully!`));
+        console.log(chalk.yellow(`\n📁 PDF files saved to: ${pdfOutputDir}`));
+
+        pdfFiles.forEach((filepath, index) => {
+          const filename = filepath.split("/").pop();
+          console.log(chalk.cyan(`  • ${filename}`));
+        });
+
+        console.log(chalk.yellow("\n📋 PDF Instructions:"));
+        console.log(
+          chalk.white("• Each PDF contains a QR code with the share data")
+        );
+        console.log(chalk.white("• Scan the QR code to restore the share"));
+        console.log(
+          chalk.white("• Store each PDF in a different secure location")
+        );
+        console.log(
+          chalk.white(
+            "• You need at least " +
+              threshold +
+              " PDFs to restore the private key"
+          )
+        );
+
+        if (options.password) {
+          console.log(
+            chalk.white(
+              "• Remember the password - you'll need it to restore encrypted shares"
+            )
+          );
+        }
+      } catch (error) {
+        console.log(
+          chalk.red(
+            `\n❌ Failed to generate PDF documents: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`
+          )
+        );
+        console.log(
+          chalk.yellow("Shares were still created successfully above.")
+        );
+      }
     }
   } catch (error) {
     throw new Error(
