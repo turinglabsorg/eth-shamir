@@ -96,7 +96,7 @@ jobs:
     - name: Test CLI installation
       run: |
         npm pack
-        npm install -g turinglabs-eth-shamir-1.0.0.tgz
+        npm install -g eth-shamir-1.0.0.tgz
         eth-shamir --help
         
     - name: Test CLI functionality
@@ -140,6 +140,6 @@ jobs:
     - name: Create release
       run: |
         npm version patch --no-git-tag-version
-        npm publish --access public
+        npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
