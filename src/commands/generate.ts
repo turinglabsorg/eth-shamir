@@ -1,5 +1,4 @@
 import chalk from "chalk";
-import inquirer from "inquirer";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { generateMnemonic, mnemonicToAccount, english } from "viem/accounts";

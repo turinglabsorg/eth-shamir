@@ -20,13 +20,24 @@ export class TestUtils {
    */
   static async runCommand(args: string[]): Promise<CommandResult> {
     return new Promise((resolve) => {
-      const child = spawn("npm", ["run", "dev", "--", ...args], {
+      const child = spawn("node", ["dist/index.js", ...args], {
         cwd: process.cwd(),
         stdio: "pipe",
       });
 
       let stdout = "";
       let stderr = "";
+
+      // Set a timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        child.kill("SIGTERM");
+        resolve({
+          stdout,
+          stderr:
+            stderr + "\n[TEST TIMEOUT] Command timed out after 30 seconds",
+          exitCode: 124, // Standard timeout exit code
+        });
+      }, 30000); // 30 second timeout
 
       child.stdout?.on("data", (data) => {
         stdout += data.toString();
@@ -37,10 +48,20 @@ export class TestUtils {
       });
 
       child.on("close", (code) => {
+        clearTimeout(timeout);
         resolve({
           stdout,
           stderr,
           exitCode: code || 0,
+        });
+      });
+
+      child.on("error", (error) => {
+        clearTimeout(timeout);
+        resolve({
+          stdout,
+          stderr: stderr + `\n[SPAWN ERROR] ${error.message}`,
+          exitCode: 1,
         });
       });
     });
@@ -59,17 +80,31 @@ export class TestUtils {
    * Read a temporary file
    */
   static readTempFile(filename: string): string {
-    const filepath = join(this.tempDir, filename);
-    return readFileSync(filepath, "utf8");
+    // First try the fixtures directory, then the current directory
+    const fixturesPath = join(this.tempDir, filename);
+    const currentPath = join(process.cwd(), filename);
+
+    if (existsSync(fixturesPath)) {
+      return readFileSync(fixturesPath, "utf8");
+    } else if (existsSync(currentPath)) {
+      return readFileSync(currentPath, "utf8");
+    } else {
+      throw new Error(`File not found: ${filename}`);
+    }
   }
 
   /**
    * Delete a temporary file
    */
   static deleteTempFile(filename: string): void {
-    const filepath = join(this.tempDir, filename);
-    if (existsSync(filepath)) {
-      unlinkSync(filepath);
+    const fixturesPath = join(this.tempDir, filename);
+    const currentPath = join(process.cwd(), filename);
+
+    if (existsSync(fixturesPath)) {
+      unlinkSync(fixturesPath);
+    }
+    if (existsSync(currentPath)) {
+      unlinkSync(currentPath);
     }
   }
 
@@ -101,7 +136,7 @@ export class TestUtils {
    */
   static extractMnemonic(output: string): string | null {
     const mnemonicMatch = output.match(/Mnemonic: (.+)/);
-    return mnemonicMatch ? mnemonicMatch[1] : null;
+    return mnemonicMatch ? mnemonicMatch[1].trim() : null;
   }
 
   /**
@@ -128,15 +163,22 @@ export class TestUtils {
       output.includes("✅") &&
       (output.includes("created successfully") ||
         output.includes("restored successfully") ||
-        output.includes("are valid"))
+        output.includes("are valid") ||
+        output.includes("generated successfully"))
     );
   }
 
   /**
    * Check if output contains error message
    */
-  static hasErrorMessage(output: string): boolean {
-    return output.includes("Error:") || output.includes("❌");
+  static hasErrorMessage(output: string, stderr?: string): boolean {
+    const combinedOutput = output + (stderr || "");
+    return (
+      combinedOutput.includes("Error:") ||
+      combinedOutput.includes("❌") ||
+      combinedOutput.startsWith("Error:") ||
+      combinedOutput.startsWith("Invalid command:")
+    );
   }
 
   /**

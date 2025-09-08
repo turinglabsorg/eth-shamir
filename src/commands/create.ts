@@ -122,7 +122,9 @@ export async function createShares(options: CreateOptions): Promise<void> {
     // Save to file if output specified
     if (options.output) {
       const outputPath = join(process.cwd(), options.output);
-      const content = shares.join("\n");
+      const content = shares
+        .map((share, index) => `Share ${index + 1}: ${share}`)
+        .join("\n");
       writeFileSync(outputPath, content, "utf8");
       console.log(chalk.green(`\n💾 Shares saved to: ${outputPath}`));
     }
