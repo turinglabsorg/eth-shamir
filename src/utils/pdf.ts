@@ -4,7 +4,6 @@
 
 import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
-import { writeFileSync } from "fs";
 import { join } from "path";
 
 export interface PDFShareOptions {
@@ -86,7 +85,7 @@ export class PDFGenerator {
     return filepaths;
   }
 
-  private static setupDocument(doc: jsPDF, options: PDFShareOptions): void {
+  private static setupDocument(doc: jsPDF, _options: PDFShareOptions): void {
     // Set font
     doc.setFont("helvetica");
     doc.setFontSize(12);
@@ -139,7 +138,7 @@ export class PDFGenerator {
       doc.setDrawColor(0, 0, 0);
       doc.setLineWidth(0.5);
       doc.rect(qrX - 2, qrY - 2, this.QR_SIZE + 4, this.QR_SIZE + 4);
-    } catch (error) {
+    } catch {
       // Fallback: add text if QR code generation fails
       doc.setFontSize(10);
       doc.text("QR Code generation failed", centerX, qrY + this.QR_SIZE / 2, {

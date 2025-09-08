@@ -129,7 +129,7 @@ export async function generateMnemonicAndShares(
         console.log(chalk.green(`\n📄 PDF documents generated successfully!`));
         console.log(chalk.yellow(`\n📁 PDF files saved to: ${pdfOutputDir}`));
 
-        pdfFiles.forEach((filepath, index) => {
+        pdfFiles.forEach((filepath) => {
           const filename = filepath.split("/").pop();
           console.log(chalk.cyan(`  • ${filename}`));
         });

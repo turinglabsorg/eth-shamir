@@ -1,7 +1,7 @@
 {
   "name": "eth-shamir",
-  "version": "1.0.2",
-  "description": "Create and restore Eth private keys with Shamir",
+  "version": "1.0.3",
+  "description": "Create and restore Ethereum private keys and mnemonics with Shamir's Secret Sharing.",
   "main": "dist/index.js",
   "bin": {
     "eth-shamir": "dist/index.js"

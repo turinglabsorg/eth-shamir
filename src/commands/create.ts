@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { writeFileSync, mkdirSync } from "fs";
-import { join, dirname } from "path";
+import { join } from "path";
 import { ShamirSecretSharing } from "../utils/shamir";
 import { PDFGenerator } from "../utils/pdf";
 
@@ -157,7 +157,7 @@ export async function createShares(options: CreateOptions): Promise<void> {
         console.log(chalk.green(`\n📄 PDF documents generated successfully!`));
         console.log(chalk.yellow(`\n📁 PDF files saved to: ${pdfOutputDir}`));
 
-        pdfFiles.forEach((filepath, index) => {
+        pdfFiles.forEach((filepath) => {
           const filename = filepath.split("/").pop();
           console.log(chalk.cyan(`  • ${filename}`));
         });

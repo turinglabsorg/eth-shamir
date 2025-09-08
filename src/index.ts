@@ -14,7 +14,7 @@ program
   .description(
     "Create and restore Ethereum private keys using Shamir's Secret Sharing"
   )
-  .version("1.0.0");
+  .version("1.0.2");
 
 program
   .command("create")

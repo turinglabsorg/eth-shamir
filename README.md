@@ -18,9 +18,21 @@ A TypeScript command-line tool for creating and restoring Ethereum private keys 
 
 ## Installation
 
+### Option 1: Install as Global Package (Recommended)
+
+```bash
+# Install globally from npm
+npm install -g eth-shamir
+
+# Verify installation
+eth-shamir --help
+```
+
+### Option 2: Install from Source
+
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/turinglabsorg/eth-shamir
 cd eth-shamir
 
 # Install dependencies
@@ -28,6 +40,9 @@ npm install
 
 # Build the project
 npm run build
+
+# Use locally
+npm run dev -- <command>
 ```
 
 ## Usage
@@ -38,22 +53,22 @@ Split an Ethereum private key into multiple shares:
 
 ```bash
 # Interactive mode
-npm run dev -- create
+eth-shamir create
 
 # Command line mode
-npm run dev create -- --key <private-key> --shares 5 --threshold 3
+eth-shamir create --key <private-key> --shares 5 --threshold 3
 
 # Save shares to file
-npm run dev create -- --key <private-key> --shares 5 --threshold 3 --output shares.txt
+eth-shamir create --key <private-key> --shares 5 --threshold 3 --output shares.txt
 
 # With password protection
-npm run dev create -- --key <private-key> --shares 5 --threshold 3 --password "mypassword"
+eth-shamir create --key <private-key> --shares 5 --threshold 3 --password "mypassword"
 
 # Generate PDF documents with QR codes
-npm run dev create -- --key <private-key> --shares 5 --threshold 3 --pdf
+eth-shamir create --key <private-key> --shares 5 --threshold 3 --pdf
 
 # Generate PDF documents with custom output directory
-npm run dev create -- --key <private-key> --shares 5 --threshold 3 --pdf --pdf-output my-shares
+eth-shamir create --key <private-key> --shares 5 --threshold 3 --pdf --pdf-output my-shares
 ```
 
 ### Restore Private Key
@@ -62,16 +77,16 @@ Restore a private key from shares:
 
 ```bash
 # Interactive mode
-npm run dev restore
+eth-shamir restore
 
 # From command line arguments
-npm run dev restore -- --shares <share1> <share2> <share3>
+eth-shamir restore --shares <share1> <share2> <share3>
 
 # From file
-npm run dev restore -- --file shares.txt
+eth-shamir restore --file shares.txt
 
 # With password protection
-npm run dev restore --shares <share1> <share2> <share3> --password "mypassword"
+eth-shamir restore --shares <share1> <share2> <share3> --password "mypassword"
 ```
 
 ### Validate Shares
@@ -80,16 +95,16 @@ Validate shares without restoring the secret:
 
 ```bash
 # Interactive mode
-npm run dev validate
+eth-shamir validate
 
 # From command line arguments
-npm run dev validate -- --shares <share1> <share2> <share3>
+eth-shamir validate --shares <share1> <share2> <share3>
 
 # From file
-npm run dev validate -- --file shares.txt
+eth-shamir validate --file shares.txt
 
 # With password protection
-npm run dev validate -- --shares <share1> <share2> <share3> --password "mypassword"
+eth-shamir validate --shares <share1> <share2> <share3> --password "mypassword"
 ```
 
 ### Generate Mnemonic and Shares
@@ -98,22 +113,22 @@ Generate a new mnemonic and automatically create shares:
 
 ```bash
 # Interactive mode
-npm run dev generate
+eth-shamir generate
 
 # Command line mode
-npm run dev generate -- --shares 5 --threshold 3
+eth-shamir generate --shares 5 --threshold 3
 
 # Save to file
-npm run dev generate -- --shares 5 --threshold 3 --output mnemonic-shares.txt
+eth-shamir generate --shares 5 --threshold 3 --output mnemonic-shares.txt
 
 # With password protection
-npm run dev generate -- --shares 5 --threshold 3 --password "mypassword"
+eth-shamir generate --shares 5 --threshold 3 --password "mypassword"
 
 # Generate PDF documents with QR codes
-npm run dev generate -- --shares 5 --threshold 3 --pdf
+eth-shamir generate --shares 5 --threshold 3 --pdf
 
 # Generate PDF documents with custom output directory
-npm run dev generate -- --shares 5 --threshold 3 --pdf --pdf-output my-mnemonic-shares
+eth-shamir generate --shares 5 --threshold 3 --pdf --pdf-output my-mnemonic-shares
 ```
 
 ## PDF Generation Feature
@@ -186,49 +201,49 @@ Examples:
 
 ```bash
 # With 0x prefix
-npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
+eth-shamir create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
 
 # Without 0x prefix (also works)
-npm run dev create -- --key 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
+eth-shamir create --key 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 5 --threshold 3
 ```
 
 ### Example 2: Restore from 3 shares
 
 ```bash
-npm run dev restore --shares 01a1b2c3d4e5f6... 02f6e5d4c3b2a1... 03b2a1c3d4e5f6...
+eth-shamir restore --shares 01a1b2c3d4e5f6... 02f6e5d4c3b2a1... 03b2a1c3d4e5f6...
 ```
 
 ### Example 3: Save shares to file and restore from file
 
 ```bash
 # Create and save shares (with 0x prefix)
-npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --output my-shares.txt
+eth-shamir create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --output my-shares.txt
 
 # Restore from file
-npm run dev restore --file my-shares.txt
+eth-shamir restore --file my-shares.txt
 ```
 
 ### Example 4: Generate new mnemonic and create shares
 
 ```bash
 # Generate mnemonic and create 5 shares with threshold 3
-npm run dev generate -- --shares 5 --threshold 3
+eth-shamir generate --shares 5 --threshold 3
 
 # Generate and save to file
-npm run dev generate -- --shares 3 --threshold 2 --output my-mnemonic.txt
+eth-shamir generate --shares 3 --threshold 2 --output my-mnemonic.txt
 ```
 
 ### Example 5: Password Protection
 
 ```bash
 # Create encrypted shares
-npm run dev create -- --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 3 --threshold 2 --password "securepassword"
+eth-shamir create --key 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef --shares 3 --threshold 2 --password "securepassword"
 
 # Restore with password
-npm run dev restore -- --shares <encrypted-share1> <encrypted-share2> --password "securepassword"
+eth-shamir restore --shares <encrypted-share1> <encrypted-share2> --password "securepassword"
 
 # Generate encrypted mnemonic shares
-npm run dev generate -- --shares 3 --threshold 2 --password "securepassword"
+eth-shamir generate --shares 3 --threshold 2 --password "securepassword"
 ```
 
 ## Password Protection
@@ -338,6 +353,7 @@ src/
 └── utils/                # Utility functions
     ├── shamir.ts         # Shamir's Secret Sharing implementation
     └── encryption.ts     # AES256 encryption utilities
+    └── pdf.ts            # PDF generation utilities
 
 tests/                    # Test suite
 ├── unit/                 # Unit tests
@@ -350,8 +366,6 @@ tests/                    # Test suite
 └── workflows/
     └── ci.yml           # CI/CD pipeline
 
-scripts/
-└── test.js              # Custom test runner
 ```
 
 ### CI/CD Pipeline
