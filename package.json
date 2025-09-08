@@ -22,7 +22,8 @@
     "test:watch": "jest --watch",
     "test:ci": "CI=true jest --coverage --watchAll=false",
     "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix"
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "test:workflow": "act --container-architecture linux/amd64"
   },
   "keywords": [
     "ethereum",
