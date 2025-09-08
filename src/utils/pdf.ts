@@ -107,7 +107,7 @@ export class PDFGenerator {
     if (options.isEncrypted) {
       doc.setFont("helvetica", "bold");
       doc.setTextColor(255, 0, 0); // Red color
-      doc.text("🔐 ENCRYPTED SHARE", centerX, y, { align: "center" });
+      doc.text("ENCRYPTED SHARE", centerX, y, { align: "center" });
       doc.setTextColor(0, 0, 0); // Reset to black
       y += 15;
     }
