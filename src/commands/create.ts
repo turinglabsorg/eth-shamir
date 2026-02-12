@@ -63,6 +63,12 @@ export async function createShares(options: CreateOptions): Promise<void> {
   const totalShares = parseInt(options.shares || "5", 10);
   const threshold = parseInt(options.threshold || "3", 10);
 
+  if (isNaN(totalShares)) {
+    throw new Error("Total shares must be a valid number");
+  }
+  if (isNaN(threshold)) {
+    throw new Error("Threshold must be a valid number");
+  }
   if (totalShares < 2) {
     throw new Error("Total shares must be at least 2");
   }

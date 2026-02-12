@@ -21,6 +21,12 @@ export async function generateMnemonicAndShares(
   const totalShares = parseInt(options.shares || "5", 10);
   const threshold = parseInt(options.threshold || "3", 10);
 
+  if (isNaN(totalShares)) {
+    throw new Error("Total shares must be a valid number");
+  }
+  if (isNaN(threshold)) {
+    throw new Error("Threshold must be a valid number");
+  }
   if (totalShares < 2) {
     throw new Error("Total shares must be at least 2");
   }
@@ -89,10 +95,11 @@ export async function generateMnemonicAndShares(
     if (options.output) {
       const outputPath = join(process.cwd(), options.output);
       const content = [
-        `# Generated Mnemonic and Shares`,
+        `# Generated Shares`,
         `# Generated on: ${new Date().toISOString()}`,
         `# Account Address: ${account.address}`,
-        `# Mnemonic: ${mnemonic}`,
+        `# NOTE: Mnemonic is NOT stored here for security reasons.`,
+        `# Use the shares below to restore the mnemonic.`,
         ``,
         `# Shares (${totalShares} total, ${threshold} threshold):`,
         ...shares.map((share, index) => `Share ${index + 1}: ${share}`),
@@ -100,7 +107,12 @@ export async function generateMnemonicAndShares(
 
       writeFileSync(outputPath, content, "utf8");
       console.log(
-        chalk.green(`\n💾 Mnemonic and shares saved to: ${outputPath}`)
+        chalk.green(`\n💾 Shares saved to: ${outputPath}`)
+      );
+      console.log(
+        chalk.yellow(
+          "Note: The mnemonic is NOT saved to the file for security. Save it separately if needed."
+        )
       );
     }
 
