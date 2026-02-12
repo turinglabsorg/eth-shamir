@@ -119,8 +119,13 @@ export class ShamirSecretSharing {
    * Convert hex back to original string format
    */
   private hexToString(hex: string): string {
-    // Remove leading zeros
-    const cleanHex = hex.replace(/^0+/, "") || "0";
+    // Only strip a single leading zero if it was added by stringToHex for
+    // even-length alignment. Stripping all leading zeros would corrupt
+    // private keys that legitimately start with "00".
+    let cleanHex = hex;
+    if (cleanHex.length % 2 !== 0) {
+      cleanHex = cleanHex.substring(1);
+    }
 
     // If it's a 64-character hex string, it's likely a private key
     if (cleanHex.length === 64 && /^[0-9a-fA-F]+$/.test(cleanHex)) {

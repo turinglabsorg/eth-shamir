@@ -194,11 +194,11 @@ describe("ETH Shamir CLI - End-to-End Tests", () => {
       ]);
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toContain("Mnemonic and shares saved to");
+      expect(result.stdout).toContain("Shares saved to");
 
       // Verify file was created
       const fileContent = TestUtils.readTempFile("test-mnemonic.txt");
-      expect(fileContent).toContain("# Generated Mnemonic and Shares");
+      expect(fileContent).toContain("# Generated Shares");
       expect(fileContent).toContain("Share 1:");
       expect(fileContent).toContain("Share 2:");
     });
