@@ -1,8 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { readFileSync } from "fs";
-import { join } from "path";
 import { ShamirSecretSharing } from "../utils/shamir";
+import { readSharesFromFile } from "../utils/file";
 
 interface ValidateOptions {
   shares?: string[];
@@ -14,14 +13,8 @@ export async function validateShares(options: ValidateOptions): Promise<void> {
   let shares: string[] = [];
 
   if (options.file) {
-    // Read shares from file
     try {
-      const filePath = join(process.cwd(), options.file);
-      const content = readFileSync(filePath, "utf8");
-      shares = content
-        .split("\n")
-        .filter((line) => line.trim().length > 0 && line.startsWith("Share "))
-        .map((line) => line.replace(/^Share \d+: /, "").trim());
+      shares = readSharesFromFile(options.file);
       console.log(
         chalk.blue(
           `📁 Loaded ${shares.length} shares from file: ${options.file}`

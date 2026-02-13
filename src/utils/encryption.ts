@@ -67,11 +67,4 @@ export class EncryptionUtils {
     return encryptedShares.map((share) => this.decrypt(share, password));
   }
 
-  /**
-   * Generate a random salt for additional security
-   * @returns Random salt string
-   */
-  static generateSalt(): string {
-    return CryptoJS.lib.WordArray.random(32).toString();
-  }
 }

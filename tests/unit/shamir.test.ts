@@ -115,6 +115,25 @@ describe("ShamirSecretSharing", () => {
       }).toThrow("At least 2 shares are required");
     });
 
+    test("should restore private key starting with zero bytes", () => {
+      // Keys starting with 00 previously failed due to aggressive zero-stripping
+      const privateKey =
+        "00abcdef1234567890abcdef1234567890abcdef1234567890abcdef12345678";
+      const shares = shamir.createShares(privateKey, 3, 2);
+
+      const restored = shamir.restoreSecret(shares.slice(0, 2));
+      expect(restored).toBe(privateKey);
+    });
+
+    test("should restore private key with multiple leading zeros", () => {
+      const privateKey =
+        "0000000090abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
+      const shares = shamir.createShares(privateKey, 3, 2);
+
+      const restored = shamir.restoreSecret(shares.slice(0, 2));
+      expect(restored).toBe(privateKey);
+    });
+
     test("should work with different combinations of shares", () => {
       const privateKey =
         "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";

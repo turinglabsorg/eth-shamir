@@ -6,6 +6,7 @@ import { createShares } from "./commands/create";
 import { restoreKey } from "./commands/restore";
 import { validateShares } from "./commands/validate";
 import { generateMnemonicAndShares } from "./commands/generate";
+import { version } from "../package.json";
 
 const program = new Command();
 
@@ -14,7 +15,7 @@ program
   .description(
     "Create and restore Ethereum private keys using Shamir's Secret Sharing"
   )
-  .version("1.0.6");
+  .version(version);
 
 program
   .command("create")
